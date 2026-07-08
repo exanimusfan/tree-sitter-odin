@@ -728,7 +728,13 @@ module.exports = grammar({
     array_type: $ => prec(1, seq(
       optional($.tag),
       '[',
-      optional(seq(optional('$'), choice('dynamic', '^', '?', $.expression))),
+      optional(seq(optional('$'), choice(
+        // `[dynamic]T` or fixed-capacity `[dynamic; N]T`
+        seq('dynamic', optional(seq(';', field('capacity', $.expression)))),
+        '^',
+        '?',
+        $.expression,
+      ))),
       ']',
       optional($.type),
     )),
@@ -843,7 +849,10 @@ module.exports = grammar({
 
     struct: $ => seq(
       optional(choice(
-        seq('[', optional(choice('dynamic', '^', '?', $.expression)), ']', $.type),
+        seq('[', optional(choice(
+          seq('dynamic', optional(seq(';', field('capacity', $.expression)))),
+          '^', '?', $.expression,
+        )), ']', $.type),
         seq(choice($.identifier, $.field_identifier), optional(seq('(', commaSep($.identifier), ')'))),
       )),
       // $.type,

@@ -80,3 +80,35 @@ Build Tags
 
 (source_file
   (build_tag))
+
+====================
+Fixed-capacity dynamic array
+====================
+
+items: [dynamic; 32]int
+buf: [dynamic; CAP]u8
+plain: [dynamic]f32
+
+---
+
+(source_file
+  (var_declaration
+    (identifier)
+    (type
+      (array_type
+        capacity: (number)
+        (type
+          (identifier)))))
+  (var_declaration
+    (identifier)
+    (type
+      (array_type
+        capacity: (identifier)
+        (type
+          (identifier)))))
+  (var_declaration
+    (identifier)
+    (type
+      (array_type
+        (type
+          (identifier))))))
